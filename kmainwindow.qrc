@@ -1,0 +1,31 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icons/selected/circle.svg</file>
+        <file>icons/selected/line.svg</file>
+        <file>icons/selected/mouse.svg</file>
+        <file>icons/selected/pen.svg</file>
+        <file>icons/selected/rect.svg</file>
+        <file>icons/selected/text.svg</file>
+        <file>icons/hover/circle.svg</file>
+        <file>icons/hover/line.svg</file>
+        <file>icons/hover/mouse.svg</file>
+        <file>icons/hover/pen.svg</file>
+        <file>icons/hover/rect.svg</file>
+        <file>icons/hover/text.svg</file>
+        <file>icons/normal/circle.svg</file>
+        <file>icons/normal/line.svg</file>
+        <file>icons/normal/mouse.svg</file>
+        <file>icons/normal/pen.svg</file>
+        <file>icons/normal/rect.svg</file>
+        <file>icons/normal/text.svg</file>
+        <file>icons/hover/hexagon.svg</file>
+        <file>icons/hover/pentagon.svg</file>
+        <file>icons/hover/pentagram.svg</file>
+        <file>icons/normal/hexagon.svg</file>
+        <file>icons/normal/pentagon.svg</file>
+        <file>icons/normal/pentagram.svg</file>
+        <file>icons/selected/hexagon.svg</file>
+        <file>icons/selected/pentagon.svg</file>
+        <file>icons/selected/pentagram.svg</file>
+    </qresource>
+</RCC>

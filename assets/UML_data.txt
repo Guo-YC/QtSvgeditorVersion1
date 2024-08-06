@@ -1,0 +1,166 @@
+@startuml
+
+left to right direction
+
+
+@startuml
+left to right direction
+
+
+class KShape {
+    +KShape(QObject *parent = Q_NULLPTR)
+    +KShape(const KShape& other)
+    +~KShape()
+    +virtual void drawShape(QPaintDevice *parent = Q_NULLPTR) = 0 //图形绘画接口函数
+    +virtual KShape* clone() = 0   // 对象克隆函数
+    +virtual void move(QPoint offset)  // 整体移动函数
+    +virtual void moveTop(QPoint pos)  // 图形向上拉升 
+    +virtual void moveBottom(QPoint pos)   // 向下拉伸
+    +virtual void moveLeft(QPoint pos)  // 向左拉伸
+    +virtual void moveRight(QPoint pos)  // 向右拉伸
+    +virtual void moveTopLeft(QPoint pos)  // 左上拉伸
+    +virtual void moveTopRight(QPoint pos)  // 右上拉伸
+    +virtual void moveBottomLeft(QPoint pos)  // 左下拉伸
+    +virtual void moveBottomRight(QPoint pos)  // 右下拉伸
+    +virtual KShapeType getShapeType()  // 获取图形类型
+    +virtual QPoint getStartPoint()
+    +virtual QPoint getEndPoint()
+    +virtual void setStartPoint(const QPoint &point)
+    +virtual void setEndPoint(const QPoint &point)
+    +void drawOutLine(QPaintDevice* parent = Q_NULLPTR)  // 绘制图形包围边框
+    +virtual QRect getShapeRect() const
+    +void updateParams()   // 更新最新属性参数
+    +bool isValid()
+    -QPoint m_startPoint //矩形左上角
+    -QPoint m_endPoint //矩形右下角
+    -Qt::PenStyle m_penStyle = Qt::SolidLine //图形边框样式
+    -QString m_borderColor = "000000"  //图形边框颜色
+    -QString m_fillColor = "FFFFFF"  //图形填充颜色
+    -int m_borderWidth = 2  //图形边框宽度
+}
+note top of KShape
+KShape是所有图形的接口类，实现了图形的移动、缩放、绘制等功能
+end note
+
+note top of KShape
+KShape是所有图形的接口类，实现了图形的移动、缩放、绘制等功能
+end note
+
+class KCircle {
+    +KCircle(QObject* parent = Q_NULLPTR)
+    +~KCircle()
+    +virtual void drawShape(QPaintDevice* parent = Q_NULLPTR) override
+    +virtual KShapeType getShapeType()
+    +virtual KShape* clone() override
+}
+
+class KHexagon {
+    +KHexagon(QObject* parent = nullptr)
+    +~KHexagon()
+    +virtual void drawShape(QPaintDevice* parent) override
+    +virtual KShape* clone() override
+    +void setCenter(const QPoint& center)
+    +void setRadius(int radius)
+    +QVector<QPoint> calculateVerticesInRectangle(const QPoint& startPoint, const QPoint& endPoint)
+    -QPoint m_center
+    -int m_radius
+    -QVector<QPoint> m_vertices
+}
+
+
+class KLine {
+    +KLine(QObject *parent = Q_NULLPTR)
+    +~KLine()
+    +virtual void drawShape(QPaintDevice* parent = Q_NULLPTR) override
+    +virtual KShape* clone() override
+    +virtual KShapeType getShapeType()
+}
+
+
+class KPen {
+    +KPen(QObject* parent = Q_NULLPTR)
+    +~KPen()
+    +virtual void drawShape(QPaintDevice* parent) override
+    +virtual KShape* clone() override
+    +virtual void resetStartPoint(QPoint point) override
+    +virtual void setStartPoint(const QPoint& point) override
+    +virtual void setEndPoint(const QPoint& point) override
+    +virtual QRect getShapeRect() const override
+    +virtual KShapeType getShapeType() override
+    +virtual void move(QPoint offset) override
+    +virtual void moveTop(QPoint pos) override
+    +virtual void moveBottom(QPoint pos) override
+    +virtual void moveLeft(QPoint pos) override
+    +virtual void moveRight(QPoint pos) override
+    +virtual void moveTopLeft(QPoint pos) override
+    +virtual void moveTopRight(QPoint pos) override
+    +virtual void moveBottomLeft(QPoint pos) override
+    +virtual void moveBottomRight(QPoint pos) override
+    +void updateBounds()
+    +void addPoint(const QPoint& point)
+    +void updateBounds(const QPoint& newPoint)
+    -QVector<QPoint> m_points
+}
+
+class KPentagon {
+    +KPentagon(QObject* parent = nullptr)
+    +~KPentagon()
+    +virtual void drawShape(QPaintDevice* parent) override
+    +virtual KShape* clone() override
+    +QVector<QPoint> calculateVerticesInRectangle(const QPoint& topLeft, const QPoint& bottomRight)
+    +KShapeType getShapeType()
+    -QPoint m_center
+    -int m_radius
+    -QVector<QPoint> m_vertices
+}
+
+class KPentagram {
+    +KPentagram(QObject* parent = nullptr)
+    +~KPentagram()
+    +virtual void drawShape(QPaintDevice* parent = Q_NULLPTR) override
+    +virtual KShape* clone() override
+    +virtual KShapeType getShapeType()
+    +QVector<QPoint> calculateVerticesInRectangle(const QPoint& startPoint, const QPoint& endPoint)
+    +QPoint findIntersection(const QPoint& p1, const QPoint& p2, const QPoint& p3, const QPoint& p4)
+}
+
+
+class KRect {
+    +KRect(QObject *parent = Q_NULLPTR)
+    +~KRect()
+    +virtual void drawShape(QPaintDevice* parent = Q_NULLPTR) override
+    +virtual KShape* clone() override
+    +virtual KShapeType getShapeType()
+}
+
+
+class KShapeFactory {
+    +KShapeFactory(QObject *parent)
+    +~KShapeFactory()
+    +static KShape* createShape(KGlobalData::KDrawFlag drawFlag)
+}
+
+
+class KText {
+    +KText(QObject* parent = Q_NULLPTR)
+    +~KText()
+    +virtual void drawShape(QPaintDevice* parent = Q_NULLPTR) override
+    +virtual KShape* clone() override
+    +virtual KShapeType getShapeType()
+    +void setText(const QString& text)
+    +QString getText() const
+    -QString m_text
+}
+
+
+KShape <|-- KCircle
+KShape <|-- KHexagon
+KShape <|-- KLine
+KShape <|-- KPen
+KShape <|-- KPentagon
+KShape <|-- KPentagram
+KShape <|-- KRect
+KShape <|-- KText
+
+KShapeFactory ..> KShape : create
+@enduml

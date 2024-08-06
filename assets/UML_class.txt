@@ -1,0 +1,276 @@
+@startuml
+class KCanvas {
+    -KShape* m_pCurrentShape
+    -KShape* m_pCurrentSelectedShape
+    -QList <KShape*> m_pCurrentSelectedShapeList
+    -QList <KShape*> m_pCurrentCutShapeList
+    -QList <QPoint> m_pCurrentCutShapeOffsetList
+    -QList <KShape*> m_pCurrentCopyShapeList
+    -QList <QPoint> m_pCurrentCopyShapeOffsetList
+    -QList <KShape*> m_pShapeList
+    -QPoint m_lastPos
+    -QPoint m_localContextMenuPos
+    -KTransType m_TransType
+    -bool m_isLPress
+    -bool m_isDrawing
+    -bool m_isSelected
+    -double m_scaleFactor
+    -QTimer m_timer
+    -QSvgRenderer* m_svgRenderer
+    -QLineEdit* m_edit
+    -KText* m_pTextShape
+}
+note top of KCanvas
+KCanvas 是主要的绘制区域类，处理
+用户输入并管理绘图形状。
+end note
+
+class KCanvasParamsBar {
+    -KValueBox *m_pWidthBox
+    -KValueBox *m_pHeightBox
+    -KColorBox *m_pColorBox
+    -KValueBox *m_pScaleBox
+    -KValueBox *m_pBorderWidthBox
+    -KColorBox *m_pShapeBorderColorBox
+    -KColorBox *m_pShapeFillColorBox
+}
+note top of KCanvasParamsBar
+KCanvasParamsBar 管理画布参数的面板。
+包含画板宽度、画板高度、画板颜色、画板缩放属性的控制。
+
+end note
+
+class KCircle {
+}
+
+class KColorBox {
+    -QPushButton* m_pColorBtn
+    -KColorType m_pColorType
+}
+note top of KColorBox
+KColorBox 是一个颜色选择组件。
+用来选择和显示颜色。
+end note
+
+class KGlobalData {
+    -KDrawFlag m_drawFlag
+    -int m_canvasWidth
+    -int m_borderWidth
+    -int m_canvasHeight
+    -QString m_canvasColor
+    -QString m_shapeBorderColor
+    -QString m_shapeFillColor
+    -qreal m_scale
+    -Qt::PenStyle m_borderStyle
+}
+note top of KGlobalData
+KGlobalData 管理全局绘图设置和参数。
+用来存储全局的数据和状态。
+end note
+
+class KHexagon {
+    -QPoint m_center
+    -int m_radius
+    -QVector<QPoint> m_vertices
+}
+
+
+
+class KMainWindow {
+    -Ui::KMainWindowClass ui
+    -QVBoxLayout *m_pVLayout
+    -QVBoxLayout *m_pParamsBarLayout
+    -QHBoxLayout *m_pHLayout
+    -KToolBar *m_pToolBar
+    -KSvgMainWindow *m_pSvgMainWin
+    -KCanvasParamsBar *m_pCanvasParamsBar
+    -KShapeParamsBar *m_pShapeParamsBar
+    -QMenuBar *m_menuBar
+    -QMenu *m_fileMenu
+    -QAction *m_newAct
+    -QAction *m_openAct
+    -QAction *m_saveAct
+    -QAction *m_exportAct
+    -QSvgRenderer* m_svgRenderer
+}
+note top of KMainWindow
+KMainWindow 是主窗口类，包含工具栏和绘制区域。
+用来管理主窗口的布局和功能。
+end note
+
+class KParamBox {
+    -QVBoxLayout* m_pVLayout
+    -QString m_title
+    -QLabel* m_pTitleLabel
+}
+note top of KParamBox
+KParamBox 是一个通用参数面板组件。
+用来显示和编辑参数。提供统一的属性控制布局。
+end note
+
+class KParamsBar {
+    -QGridLayout* m_pGridLayout
+    -QVBoxLayout* m_pVBoxLayout
+    -QString m_title
+    -QLabel* m_pTitleLabel
+}
+note top of KParamsBar
+KParamsBar 是一个参数栏基类。
+用来管理参数栏的布局和功能。
+end note
+
+class KShape {
+    -QPoint m_startPoint
+    -QPoint m_endPoint
+    -Qt::PenStyle m_penStyle
+    -QString m_borderColor
+    -QString m_fillColor
+    -int m_borderWidth
+}
+note top of KShape
+KShape 是一个抽象基类，用于定义基本形状。
+提供形不同绘画对象统一的接口实现和统一的基础操作。
+end note
+
+class KShapeFactory {
+}
+note top of KShapeFactory
+KShapeFactory 用于创建不同类型的形状实例。
+提供创建不同形状对象的工厂方法。
+end note
+
+class KShapeParamsBar {
+    -KValueBox *m_pBorderWidthBox
+    -KColorBox *m_pShapeBorderColorBox
+    -KColorBox *m_pShapeFillColorBox
+    -KStyleBox *m_pShapeBorderStyleBox
+}
+note top of KShapeParamsBar
+KShapeParamsBar 管理形状参数的面板。
+提供形状的边框宽度属性设置、边框颜色、填充颜色、边框样式等设参数设置。
+end note
+
+class KStyleBox {
+    -QVBoxLayout* m_pVLayout
+    -QString m_title
+    -QComboBox* m_pStyleBox
+}
+note top of KStyleBox
+KStyleBox 是一个样式选择组件。
+通过下拉框的形式提供选择不同边框样式（如实线、虚线等）的选项。
+end note
+
+class KSvgMainWindow {
+    -KCanvas *m_pCanvas
+}
+note top of KSvgMainWindow
+KSvgMainWindow 是包含画布的主要绘图窗口。
+end note
+
+class KToolBar {
+    -QVBoxLayout* m_pVLayout
+    -QButtonGroup* m_pBtnGroup
+    -KToolButton* m_pMouseBtn
+    -KToolButton* m_pPenBtn
+    -KToolButton* m_pLineBtn
+    -KToolButton* m_pRectBtn
+    -KToolButton* m_pCircleBtn
+    -KToolButton* m_pTextBtn
+    -KToolButton* m_pPentagonBtn
+    -KToolButton* m_pPentagramBtn
+    -KToolButton* m_pHexagonBtn
+}
+note top of KToolBar
+KToolBar 是主工具栏，包含各种绘图工具按钮。
+包括鼠标工具、画笔工具、线条工具、矩形工具、圆形工具、文本工具、五边形工具、五角星工具、六边形工具等。
+end note
+
+class KToolButton {
+    -QString m_iconName
+    -QSvgRenderer* m_pSvgRenderer
+    -KGlobalData::KDrawFlag m_drawFlag
+}
+note top of KToolButton
+KToolButton 是工具按钮类，用于选择绘图工具。
+end note
+
+class KValueBox {
+    -QLineEdit *m_pParamEdit
+}
+note top of KValueBox
+KValueBox 是一个数值输入组件。
+通过文本框的形式提供输入数值的接口。
+end note
+
+class KLine {
+}
+
+
+class KPen {
+    -QVector<QPoint> m_points
+}
+ 
+
+class KPentagon {
+    -QPoint m_center
+    -int m_radius
+    -QVector<QPoint> m_vertices
+}
+ 
+
+class KPentagram {
+}
+ 
+
+class KRect {
+}
+ 
+
+class KText {
+    -QString m_text
+}
+ 
+
+KCanvas --> KShape : uses
+KCanvas *-- QSvgRenderer : composition
+KCanvas ..> KGlobalData : depends on
+KCanvas --> QLineEdit : uses
+KCanvas --> KText : uses
+KCanvasParamsBar --|> KParamsBar : generalization
+KCanvasParamsBar o-- KValueBox : aggregation
+KCanvasParamsBar o-- KColorBox : aggregation
+KColorBox --|> KParamBox : generalization
+KGlobalData --> KShape : depends on
+KMainWindow *-- KToolBar : composition
+KMainWindow *-- KSvgMainWindow : composition
+KMainWindow *-- KCanvasParamsBar : composition
+KMainWindow *-- KShapeParamsBar : composition
+KShapeParamsBar --|> KParamsBar : generalization
+KShapeParamsBar o-- KValueBox : aggregation
+KShapeParamsBar o-- KColorBox : aggregation
+KShapeParamsBar o-- KStyleBox : aggregation
+KShapeFactory ..> KShape : depends on
+KStyleBox --|> KParamBox : generalization
+KSvgMainWindow *-- KCanvas : composition
+KToolBar o-- KToolButton : aggregation
+KToolButton --|> QRadioButton : generalization
+KToolButton --> QSvgRenderer : uses
+KToolButton ..> KGlobalData : depends on
+KValueBox --|> QLineEdit : generalization
+KValueBox --|> KParamBox : generalization
+
+KShape <|-- KCircle
+KShape <|-- KHexagon
+KShape <|-- KLine
+KShape <|-- KPen
+KShape <|-- KPentagon
+KShape <|-- KPentagram
+KShape <|-- KRect
+KShape <|-- KText
+
+KShapeFactory ..> KGlobalData
+KCanvas *-- QTimer
+KCanvas *-- KText
+KCanvas *-- KShape
+KCanvas o-- KGlobalData
+@enduml
